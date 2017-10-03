@@ -5,7 +5,7 @@ using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
-using Vidly.ViewModels;
+using Vidly.ViewModels; 
 
 namespace Vidly.Controllers
 {
@@ -29,8 +29,14 @@ namespace Vidly.Controllers
         public ActionResult Index()
         {
             //var customers = _context.Customers.Include(c => c.MembershipType).ToList(); //getCustomers();
+            // don't use unless necessary 
+            //if (MemoryCache.Default["Genres"] == null)
+            //{
+            //    MemoryCache.Defualt["Genres"] = _context.Genres.ToList();
+            //}
 
-            return View();//customers
+            //var genres = MemoryCache.Default["Genres"] as IEnumerable<Genre>;
+            return View(); 
         }
 
         public ActionResult New()
