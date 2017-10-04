@@ -245,14 +245,17 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\CustomersController.cs" />
     <Compile Include="Controllers\Api\MoviesController.cs" />
+    <Compile Include="Controllers\Api\NewRentalsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
+    <Compile Include="Controllers\RentalsController.cs" />
     <Compile Include="Dtos\CustomerDto.cs" />
     <Compile Include="Dtos\GenreDto.cs" />
     <Compile Include="Dtos\MembershipTypeDto.cs" />
     <Compile Include="Dtos\MovieDto.cs" />
+    <Compile Include="Dtos\NewRentalDto.cs" />
     <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -361,6 +364,18 @@
     <Compile Include="Migrations\201710021955281_AddPhoneToRegister.Designer.cs">
       <DependentUpon>201710021955281_AddPhoneToRegister.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710041512247_AddRentalModel.cs" />
+    <Compile Include="Migrations\201710041512247_AddRentalModel.Designer.cs">
+      <DependentUpon>201710041512247_AddRentalModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710041515020_MakeMovieRequiredRentalModel.cs" />
+    <Compile Include="Migrations\201710041515020_MakeMovieRequiredRentalModel.Designer.cs">
+      <DependentUpon>201710041515020_MakeMovieRequiredRentalModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710041536206_AddNumberAvaiableToMovieModel.cs" />
+    <Compile Include="Migrations\201710041536206_AddNumberAvaiableToMovieModel.Designer.cs">
+      <DependentUpon>201710041536206_AddNumberAvaiableToMovieModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -371,6 +386,7 @@
     <Compile Include="Models\MembershipType.cs" />
     <Compile Include="Models\Min18YearsIfMember.cs" />
     <Compile Include="Models\Movie.cs" />
+    <Compile Include="Models\Rental.cs" />
     <Compile Include="Models\RoleName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -701,6 +717,7 @@
     <Content Include="Views\Customers\CustomerForm.cshtml" />
     <Content Include="Views\Movies\MovieForm.cshtml" />
     <Content Include="Views\Movies\ReadOnlyList.cshtml" />
+    <Content Include="Views\Rentals\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -787,6 +804,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710021955281_AddPhoneToRegister.resx">
       <DependentUpon>201710021955281_AddPhoneToRegister.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710041512247_AddRentalModel.resx">
+      <DependentUpon>201710041512247_AddRentalModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710041515020_MakeMovieRequiredRentalModel.resx">
+      <DependentUpon>201710041515020_MakeMovieRequiredRentalModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710041536206_AddNumberAvaiableToMovieModel.resx">
+      <DependentUpon>201710041536206_AddNumberAvaiableToMovieModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

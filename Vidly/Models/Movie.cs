@@ -33,5 +33,7 @@ namespace Vidly.Models
         [Required]
         public byte NumberInStock { get; set; }
 
+        public byte NumberAvailable { get; set; }
+
     }
 }
