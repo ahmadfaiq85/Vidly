@@ -5,12 +5,12 @@
 
 <h2>New Rental Form</h2>
 
-<form>
+<form id="newRental">
 
     <div class="form-group">
         <label>Customer</label>
         <div class="tt-container">
-            <input type="text" id="customer" class="form-control" />
+            <input type="text" name="customer" data-rule-validCustomer="true" id="customer" required class="form-control" />
         </div>
 
     </div>
@@ -18,7 +18,7 @@
     <div class="form-group">
         <label>Movie</label>
         <div class="tt-container">
-            <input type="text" id="movie" class="form-control" />
+            <input type="text" name="movie" data-rule-atleast id="movie" class="form-control" />
         </div>
     </div>
 
@@ -32,6 +32,7 @@
 </form>
 
 @section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
         $(document).ready(function () {
 
@@ -83,6 +84,44 @@
                 vm.movieIds.push(movie.id);
             });
 
+            $.validator.addMethod("validCustomer", function () {
+                return vm.customerId && vm.customerId != 0;
+            }, "Please select a valid customer.");
+
+            $.validator.addMethod("atleastOneMovie", function () {
+                return vm.movieIds.length > 0;
+            }, "Please select at least one movie.");
+
+            var validator = $('#newRental').validate({
+                submitHandler: function () {
+                    //e.preventDefault();
+
+                    $.ajax({
+                        url: '/api/newRentals',
+                        method: 'post',
+                        data: vm
+                    })
+                    .done(function () {
+                        toastr.success("Rental successfully recorded.");
+
+                        $('#customer').typeahead("val", "");
+                        $('#movie').typeahead("val", "");
+                        $('#movies').empty();
+
+                        vm = { movieIds: [] };
+
+                        validator.resetForm();
+                    })
+                    .fail(function () {
+                        toastr.error("Something unexpected happened.");
+                    });
+
+                    return false;
+                }
+            });
+
+            //$('#newRental').submit(function (e) {
+            //});
         });
     </script>
 
