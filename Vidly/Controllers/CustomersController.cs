@@ -20,7 +20,6 @@ namespace Vidly.Controllers
         {
             _context = new ApplicationDbContext();
             _unitOfWork = new UnitOfWork(_context);
-
         }
 
         protected override void Dispose(bool disposing)

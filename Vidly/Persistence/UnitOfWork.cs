@@ -11,13 +11,21 @@ namespace Vidly.Persistence
     {
         private ApplicationDbContext _context;
         public CustomerRepository CustomerRepository;
+        public MovieRepository MovieRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             CustomerRepository = new CustomerRepository(_context);
+            MovieRepository = new MovieRepository(_context);
         }
 
+
+
+        public void Complete()
+        {
+            _context.SaveChanges();
+        }
 
     }
 }
