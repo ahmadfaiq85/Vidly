@@ -5,7 +5,8 @@ using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
-using Vidly.ViewModels; 
+using Vidly.ViewModels;
+using Vidly.Persistence;
 
 namespace Vidly.Controllers
 {
@@ -13,10 +14,13 @@ namespace Vidly.Controllers
     public class CustomersController : Controller
     {
         private ApplicationDbContext _context;
+        private UnitOfWork _unitOfWork;
 
         public CustomersController()
         {
             _context = new ApplicationDbContext();
+            _unitOfWork = new UnitOfWork(_context);
+
         }
 
         protected override void Dispose(bool disposing)
@@ -70,7 +74,7 @@ namespace Vidly.Controllers
                 _context.Customers.Add(customer);
             else
             {
-                var customerInDb = _context.Customers.Single(c => c.Id == customer.Id);
+                var customerInDb = _unitOfWork.CustomerRepository.getDetail(customer.Id);
 
                 customerInDb.Name = customer.Name;
                 customerInDb.Birthdate = customer.Birthdate;
@@ -84,7 +88,7 @@ namespace Vidly.Controllers
 
         public ActionResult Details(int Id)
         {
-            var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == Id);
+            var customer = _unitOfWork.CustomerRepository.getDetail(Id);
 
             if (customer == null)
                 return HttpNotFound();
@@ -94,7 +98,7 @@ namespace Vidly.Controllers
 
         public ActionResult Edit(int Id)
         {
-            var customer = _context.Customers.SingleOrDefault(c => c.Id == Id);
+            var customer = _unitOfWork.CustomerRepository.getDetail(Id);
 
             if (customer == null)
                 return HttpNotFound();
