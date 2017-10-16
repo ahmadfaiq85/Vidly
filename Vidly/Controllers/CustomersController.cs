@@ -44,7 +44,7 @@ namespace Vidly.Controllers
 
         public ActionResult New()
         {
-            var membershipTypes = _context.MembershipTypes.ToList();
+            var membershipTypes = _unitOfWork.CustomerRepository.getMembershipTypes();
             var viewModel = new CustomerFormViewModel
             {
                 Customer = new Customer(),
@@ -63,14 +63,14 @@ namespace Vidly.Controllers
                 var viewModel = new CustomerFormViewModel
                 {
                     Customer = customer,
-                    MembershipTypes = _context.MembershipTypes.ToList()
+                    MembershipTypes = _unitOfWork.CustomerRepository.getMembershipTypes()
                 };
 
                 return View("CustomerForm", viewModel);
             }
 
-            if(customer.Id == 0)
-                _context.Customers.Add(customer);
+            if (customer.Id == 0)
+                _unitOfWork.CustomerRepository.Add(customer);
             else
             {
                 var customerInDb = _unitOfWork.CustomerRepository.getDetail(customer.Id);
@@ -80,7 +80,7 @@ namespace Vidly.Controllers
                 customerInDb.MembershipTypeId = customer.MembershipTypeId;
                 customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
             }
-            _context.SaveChanges();
+            _unitOfWork.Complete();
 
             return RedirectToAction("Index", "Customers");
         }
@@ -105,7 +105,7 @@ namespace Vidly.Controllers
             var viewModel = new CustomerFormViewModel
             {
                 Customer = customer,
-                MembershipTypes = _context.MembershipTypes.ToList()
+                MembershipTypes = _unitOfWork.CustomerRepository.getMembershipTypes()
             };
 
             return View("CustomerForm", viewModel);

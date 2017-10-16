@@ -24,6 +24,15 @@ namespace Vidly.Repositories
                   .SingleOrDefault(c => c.Id == Id);
         }
 
+        public IEnumerable<MembershipType> getMembershipTypes()
+        {
+            return _context.MembershipTypes.ToList();
+        }
+
+        public void Add(Customer customer)
+        {
+            _context.Customers.Add(customer);
+        }
 
     }
 }
