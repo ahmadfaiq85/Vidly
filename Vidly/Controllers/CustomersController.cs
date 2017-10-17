@@ -6,27 +6,20 @@ using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
 using Vidly.ViewModels;
-using Vidly.Persistence;
+using Vidly.Interfaces;
 
 namespace Vidly.Controllers
 {
     [Authorize]
     public class CustomersController : Controller
-    {
-        private ApplicationDbContext _context;
-        private UnitOfWork _unitOfWork;
+    { 
+        private IUnitOfWork _unitOfWork;
 
-        public CustomersController()
-        {
-            _context = new ApplicationDbContext();
-            _unitOfWork = new UnitOfWork(_context);
+        public CustomersController(IUnitOfWork unitOfWork)
+        { 
+            _unitOfWork = unitOfWork;
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            _context.Dispose();
-        }
-
+         
         // GET: Customers
         //[Authorize]
         public ActionResult Index()
@@ -44,7 +37,7 @@ namespace Vidly.Controllers
 
         public ActionResult New()
         {
-            var membershipTypes = _unitOfWork.CustomerRepository.getMembershipTypes();
+            var membershipTypes = _unitOfWork.Customers.getMembershipTypes();
             var viewModel = new CustomerFormViewModel
             {
                 Customer = new Customer(),
@@ -63,17 +56,17 @@ namespace Vidly.Controllers
                 var viewModel = new CustomerFormViewModel
                 {
                     Customer = customer,
-                    MembershipTypes = _unitOfWork.CustomerRepository.getMembershipTypes()
+                    MembershipTypes = _unitOfWork.Customers.getMembershipTypes()
                 };
 
                 return View("CustomerForm", viewModel);
             }
 
             if (customer.Id == 0)
-                _unitOfWork.CustomerRepository.Add(customer);
+                _unitOfWork.Customers.Add(customer);
             else
             {
-                var customerInDb = _unitOfWork.CustomerRepository.getDetail(customer.Id);
+                var customerInDb = _unitOfWork.Customers.getDetail(customer.Id);
 
                 customerInDb.Name = customer.Name;
                 customerInDb.Birthdate = customer.Birthdate;
@@ -87,7 +80,7 @@ namespace Vidly.Controllers
 
         public ActionResult Details(int Id)
         {
-            var customer = _unitOfWork.CustomerRepository.getDetail(Id);
+            var customer = _unitOfWork.Customers.getDetail(Id);
 
             if (customer == null)
                 return HttpNotFound();
@@ -97,7 +90,7 @@ namespace Vidly.Controllers
 
         public ActionResult Edit(int Id)
         {
-            var customer = _unitOfWork.CustomerRepository.getDetail(Id);
+            var customer = _unitOfWork.Customers.getDetail(Id);
 
             if (customer == null)
                 return HttpNotFound();
@@ -105,7 +98,7 @@ namespace Vidly.Controllers
             var viewModel = new CustomerFormViewModel
             {
                 Customer = customer,
-                MembershipTypes = _unitOfWork.CustomerRepository.getMembershipTypes()
+                MembershipTypes = _unitOfWork.Customers.getMembershipTypes()
             };
 
             return View("CustomerForm", viewModel);

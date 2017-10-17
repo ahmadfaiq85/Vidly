@@ -4,10 +4,11 @@ using System.Linq;
 using System.Web;
 using Vidly.Models;
 using System.Data.Entity;
+using Vidly.Interfaces;
 
 namespace Vidly.Repositories
 {
-    public class MovieRepository
+    public class MovieRepository : IMovieRepository
     {
         private ApplicationDbContext _context;
         public MovieRepository(ApplicationDbContext context)

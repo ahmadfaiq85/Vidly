@@ -6,25 +6,19 @@ using System.Web.Mvc;
 using Vidly.Models;
 using Vidly.ViewModels;
 using System.Data.Entity;
-using Vidly.Persistence;
+using Vidly.Interfaces;
 
 namespace Vidly.Controllers
 {
     public class MoviesController : Controller
-    {
-        ApplicationDbContext _context;
-        public UnitOfWork _unitOfWork;
+    { 
+        public IUnitOfWork _unitOfWork;
 
-        public MoviesController()
+        public MoviesController(IUnitOfWork unitOfWork)
         {
-            _context = new ApplicationDbContext();
-            _unitOfWork = new UnitOfWork(_context);
+            _unitOfWork = unitOfWork;
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            _context.Dispose();
-        }
+         
         // GET: Movies/Random
         public ActionResult Random()
         {
@@ -53,7 +47,7 @@ namespace Vidly.Controllers
         [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult New()
         {
-            var genres = _unitOfWork.MovieRepository.getGenres();
+            var genres = _unitOfWork.Movies.getGenres();
 
             var viewModel = new MovieFormViewModel
             {
@@ -66,8 +60,8 @@ namespace Vidly.Controllers
         [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult Edit(int Id)
         {
-            var movieInDb = _unitOfWork.MovieRepository.getDetail(Id);
-            var genres = _unitOfWork.MovieRepository.getGenres();
+            var movieInDb = _unitOfWork.Movies.getDetail(Id);
+            var genres = _unitOfWork.Movies.getGenres();
 
             var viewModel = new MovieFormViewModel(movieInDb)
             {
@@ -86,7 +80,7 @@ namespace Vidly.Controllers
             {
                 var viewModel = new MovieFormViewModel
                 {
-                    Genres = _unitOfWork.MovieRepository.getGenres()
+                    Genres = _unitOfWork.Movies.getGenres()
                 };
 
             return View("MovieForm", viewModel);
@@ -95,11 +89,11 @@ namespace Vidly.Controllers
             if(movie.Id == 0)
             {
                 movie.DateAdded = DateTime.Now;
-                _unitOfWork.MovieRepository.Add(movie);
+                _unitOfWork.Movies.Add(movie);
             }
             else
             {
-                var movieInDb = _unitOfWork.MovieRepository.getDetail(movie.Id);
+                var movieInDb = _unitOfWork.Movies.getDetail(movie.Id);
                 movieInDb.Name = movie.Name;
                 movieInDb.GenreId = movie.GenreId;
                 movieInDb.NumberInStock = movie.NumberInStock;
@@ -128,7 +122,7 @@ namespace Vidly.Controllers
 
         public ActionResult Details(int Id)
         {
-            var movie = _unitOfWork.MovieRepository.getDetail(Id);
+            var movie = _unitOfWork.Movies.getDetail(Id);
             return View(movie);
         }
 

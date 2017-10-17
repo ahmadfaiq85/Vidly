@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using Vidly.Models;
+using Vidly.Interfaces;
 
 namespace Vidly.Repositories
 {
-
-    public class CustomerRepository
+    public class CustomerRepository : ICustomerRepository
     {
         private readonly ApplicationDbContext _context;
 
